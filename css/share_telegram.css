@@ -1,0 +1,25 @@
+a.telegram_btn {
+	background: #0088CC;
+	color: #fff;
+	font-size: 13px;
+	height: 41px;
+	display: inline-block;
+	border-radius: 2px;
+	padding: 0 20px;
+	line-height: 39px;
+}
+a.telegram_btn:hover {
+	color: #fff;
+}
+
+a.telegram_btn.telegram_btn_s{
+	padding: 0 6px;
+}
+a.telegram_btn.telegram_btn_m{
+	padding: 0 20px;
+}
+a.telegram_btn.telegram_btn_l{
+	padding: 0 25px;
+	display: block;
+	text-align: center;
+}

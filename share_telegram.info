@@ -1,0 +1,10 @@
+name = Share To Telegram
+description = This module provide a button to share your node on telegram. <a target="_blank" href="http://webpen.ir">Webpen.ir</a>
+package = Share
+core = 7.x
+version = "7.x.0"
+configure = admin/config/services/telegramshare
+scripts[] = js/share_telegram.js
+stylesheets[all][] = css/share_telegram.css
+
+

@@ -1,0 +1,105 @@
+<?php
+
+/**
+ * Implements menu hook().
+ */
+function share_telegram_menu() {
+	$items = array();
+	$items['admin/config/services/telegramshare'] = array(
+		'title' => 'Telegram Share',
+		'description' => 'Help to share your content on telegram',
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('share_telegram_form'),
+		'access arguments' => array('administer share_telegram'),
+	);
+	return $items;
+}
+
+
+
+/**
+ * Implements hook_permission().
+ */
+function share_telegram_permission() {
+	return array(
+		'administer share_telegram' => array(
+			'title' => t('Administer share_telegram Share'),
+			'description' => t('Provide permission to user for share_telegram share.'),
+		),
+		'share telegram button permission' => array(
+			'title' => t('Administer share telegram button'),
+			'description' => t('Allow people to make use of telegram share button.'),
+		),
+	);
+}
+
+
+function share_telegram_form($form, &$form_submit){
+		$form['button_text'] = array(
+			'#title' => t('Button Text'),
+			'#type' => 'textfield',
+			'#description' => t('Insert your share_telegram button text.'),
+			'#default_value' => variable_get('telegram_share_button_text', t('Share on telegram app')),
+			'#required' => TRUE,
+		);
+		$form['button_size'] = array(
+			'#title' => t('Button Size'),
+			'#type' => 'select',
+			'#description' => t('Select the Button Size.'),
+			'#options' => array(
+				'telegram_btn_s' => t('Small'),
+				'telegram_btn_m' => t('Medium'),
+				'telegram_btn_l' => t('Large'),
+			),
+			'#default_value' => variable_get('telegram_share_button_size', t('Small')),
+		);
+		$form['sharing_text'] = array(
+			'#title' => t('Sharing title'),
+			'#type' => 'textfield',
+			'#description' => t('Insert Sharing title using a jQuery selector. For example: #page-title to get text element.'),
+			'#required' => TRUE,
+			'#cols' => 60,
+			'#rows' => 5,
+			'#default_value' => variable_get('telegram_share_sharing_title', '#page-title'),
+		);
+		$form['sharing_location'] = array(
+			'#title' => t('Sharing location'),
+			'#type' => 'textfield',
+			'#description' => t('Insert Sharing location using a jQuery selector. For example: #page-title to place it after the page title.'),
+			'#required' => TRUE,
+			'#default_value' => variable_get('telegram_share_sharing_location', '#page-title'),
+		);
+		$form['submit'] = array(
+			'#type' => 'submit',
+			'#value' => 'Submit',
+		);
+		return $form;
+
+}
+
+function share_telegram_form_submit($form, &$form_state){
+	variable_set('telegram_share_button_text', $form_state['values']['button_text']);
+	variable_set('telegram_share_button_size', $form_state['values']['button_size']);
+	variable_set('telegram_share_sharing_title', $form_state['values']['sharing_text']);
+	variable_set('telegram_share_sharing_location', $form_state['values']['sharing_location']);
+	drupal_set_message(t('Your Telegram sharing configuration has been saved.'));
+}
+
+
+
+function share_telegram_init() {
+	global $base_url;
+	$path = $base_url . '/' . request_path();
+	if(user_access('share telegram button permission')) {
+		drupal_add_js(array(
+			'share_telegram' => array(
+				'telegram_share_button_text' => variable_get('telegram_share_button_text', t('Share on whatsapp')),
+				'telegram_share_button_size' => variable_get('telegram_share_button_size', t('Small')),
+				'telegram_share_sharing_title' => variable_get('telegram_share_sharing_title', t('Your sharing text will come here.')),
+				'telegram_share_sharing_location' => variable_get('telegram_share_sharing_location', '#page-title'),
+				'base_path' => $path,
+			)
+		,), 'setting');
+	}
+	drupal_add_js(drupal_get_path('module', 'share_telegram') . '/js/share_telegram.js');
+}
