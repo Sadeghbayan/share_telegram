@@ -4,7 +4,6 @@ package = Share
 core = 7.x
 version = "7.x.0"
 configure = admin/config/services/telegramshare
-scripts[] = js/share_telegram.js
 stylesheets[all][] = css/share_telegram.css
 
 
